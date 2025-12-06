@@ -6,3 +6,9 @@ Team Members:
 - Noah Rush
 
 Setup Instructions
+
+AI
+- some docstrings for commenting/documentation were AI generated
+- Window averaging was implemented by AI
+- suggested frequency calculation
+- error handling (eg try-except, rc, exception as etc) added by AI
