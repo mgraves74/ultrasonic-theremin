@@ -139,7 +139,6 @@ def get_current_waveform():
 def init_audio():
     """Initialize audio system"""
     print("Initializing audio engine...")
-    print(sd.query_devices())
     start_audio_stream()
 
 def cleanup_audio():

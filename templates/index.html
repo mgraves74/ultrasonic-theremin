@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultrasonic Theremin Dashboard</title>
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Custom Styles and Scripts -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Connection Status -->
+    <div class="connection-status">
+        <div class="connection-dot" id="connection-dot"></div>
+        <span id="connection-text">Disconnected</span>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>🎵 THEREMIN DASHBOARD</h1>
+        <div class="subtitle">IoT Musical Instrument Visualizer</div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        
+        <!-- Status Section -->
+        <div class="status-section">
+            <div class="status-grid">
+                <!-- Playing Status -->
+                <div class="status-card">
+                    <div class="status-label">Status</div>
+                    <div class="playing-indicator">
+                        <div class="status-dot" id="status-dot"></div>
+                        <span id="status-text">SILENT</span>
+                    </div>
+                </div>
+                
+                <!-- Frequency/Note -->
+                <div class="status-card">
+                    <div class="status-label">Frequency</div>
+                    <div class="status-value" id="frequency-display">0 Hz</div>
+                    <div class="status-subvalue" id="note-display">—</div>
+                </div>
+                
+                <!-- Volume -->
+                <div class="status-card">
+                    <div class="status-label">Volume</div>
+                    <div class="status-value" id="volume-display">0%</div>
+                </div>
+                
+                <!-- Distance -->
+                <div class="status-card">
+                    <div class="status-label">Distance</div>
+                    <div class="status-value" id="distance-display">0.0 cm</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Waveform -->
+        <div class="viz-section">
+            <div class="viz-title">Waveform</div>
+            <canvas id="waveform-canvas"></canvas>
+        </div>
+        
+        <!-- Frequency History Chart -->
+        <div class="viz-section">
+            <div class="viz-title">Frequency Over Time</div>
+            <div class="chart-container">
+                <canvas id="frequency-chart"></canvas>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>

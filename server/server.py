@@ -6,6 +6,7 @@ from flask import Flask, render_template
 from flask_socketio import SocketIO
 import threading
 import time
+import math
 
 import audio_engine
 
@@ -23,13 +24,33 @@ FREQ_MAX = 1024  # C6
 
 # ===== FLASK INIT =====
 app = Flask(__name__)
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
 # ===== GLOBAL VARS =====
 current_distance = 0.0
 current_volume = 0.5
 current_frequency = 0.0
 is_playing = False
+
+# ===== FREQUENCY QUANTIZATION =====
+def quantize_to_half_semitone(raw_freq, base_freq=432.0):
+    """
+    Quantize frequency to nearest half-semitone (50 cent) interval
+    Uses A432 tuning with C = 256
+    """
+    if raw_freq <= 0:
+        return 0.0
+    
+    # Convert freq to semitones relative to base (A4 = 432 Hz)
+    semitones_from_base = 12.0 * math.log2(raw_freq / base_freq)
+    
+    # Round to nearest half-semitone (0.5 semitone intervals)
+    quantized_semitones = round(semitones_from_base * 2) / 2.0
+    
+    # Convert back to frequency
+    quantized_freq = base_freq * (2 ** (quantized_semitones / 12.0))
+    
+    return quantized_freq
 
 # ===== MQTT CALLBACKS =====
 def on_connect(client, userdata, flags, rc):
@@ -61,19 +82,25 @@ def on_message(client, userdata, msg):
  
                 # Map dist to freq
                 normalized = (current_distance - DISTANCE_MIN) / (DISTANCE_MAX - DISTANCE_MIN)
-                current_frequency = FREQ_MIN + (FREQ_MAX - FREQ_MIN) * (1 - normalized)
+                raw_frequency = FREQ_MIN + (FREQ_MAX - FREQ_MIN) * (1 - normalized)
+
+                # Quantize to half-semitone intervals in A432 tuning
+                current_frequency = quantize_to_half_semitone(raw_frequency)
+
                 is_playing = True
 
             elif DISTANCE_MAX <= current_distance <= BUFFER_MAX:
                 current_distance = 25
                 normalized = (current_distance - DISTANCE_MIN) / (DISTANCE_MAX - DISTANCE_MIN)
-                current_frequency = FREQ_MIN + (FREQ_MAX - FREQ_MIN) * (1 - normalized)
+                raw_frequency = FREQ_MIN + (FREQ_MAX - FREQ_MIN) * (1 - normalized)
+                current_frequency = quantize_to_half_semitone(raw_frequency)
                 is_playing = True
 
             elif BUFFER_MIN <= current_distance <= DISTANCE_MIN:
                 current_distance = 2
                 normalized = (current_distance - DISTANCE_MIN) / (DISTANCE_MAX - DISTANCE_MIN)
-                current_frequency = FREQ_MIN + (FREQ_MAX - FREQ_MIN) * (1 - normalized)
+                raw_frequency = FREQ_MIN + (FREQ_MAX - FREQ_MIN) * (1 - normalized)
+                current_frequency = quantize_to_half_semitone(raw_frequency)
                 is_playing = True
                 
             else:
@@ -128,7 +155,8 @@ def broadcast_state():
         'frequency': current_frequency,
         'volume': current_volume,
         'distance': current_distance,
-        'playing': is_playing
+        'playing': is_playing,
+        'timestamp': time.time()
     }
     socketio.emit('audio_state', state_data)
 
