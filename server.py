@@ -108,8 +108,7 @@ def on_message(client, userdata, msg):
                 current_frequency = 0.0
                 is_playing = False
             
-            ####TEMP####
-            # print audio state for debugging
+            # print audio state - AI generated section
             if is_playing:
                 print(f"PLAYING | Freq: {current_frequency:.1f} Hz | Vol: {current_volume:.2f} | Dist: {current_distance:.1f}cm")
             else:
@@ -148,7 +147,7 @@ mqtt_thread.start()
 # Init audio engine
 audio_engine.init_audio()
 
-# ===== WEBSOCKET FUNCTIONS =====
+# ===== WEBSOCKET FUNCTIONS ===== AI-generated section
 def broadcast_state():
     """Send current audio state to all connected browsers"""
     state_data = {
@@ -175,7 +174,7 @@ def index():
     """Main dashboard page"""
     return render_template('index.html')
 
-# ===== WEBSOCKET EVENTS =====
+# ===== WEBSOCKET EVENTS ===== AI-generated section
 @socketio.on('connect')
 def handle_connect():
     """When browser connects via WebSocket"""
@@ -187,7 +186,7 @@ def handle_disconnect():
     """When browser disconnects"""
     print("Browser disconnected")
 
-# ===== BACKGROUND TASK =====
+# ===== BACKGROUND TASK ===== AI-generated section
 def background_broadcast():
     """Periodically broadcast sensor data for visualization"""
     while True:
@@ -199,12 +198,14 @@ def background_broadcast():
 
         time.sleep(0.05)  # 20 Hz
 
-# Start background broadcasting
+# Start background broadcasting - AI generated section
 broadcast_thread = threading.Thread(target=background_broadcast, daemon=True)
 broadcast_thread.start()
 
 # ===== MAIN =====
 if __name__ == '__main__':
+
+    # AI-generated print statements
     print("=" * 50)
     print("Theremin Server Starting...")
     print(f"Distance threshold: {DISTANCE_MIN}cm - {DISTANCE_MAX}cm")

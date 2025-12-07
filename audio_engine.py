@@ -58,6 +58,8 @@ def generate_silence(duration):
     num_samples = int(SAMPLE_RATE * duration)
     return np.zeros(num_samples, dtype=np.float32)
 
+### Remaining code in this file is fully or mostly AI-generated
+
 def audio_callback(outdata, frames, time_info, status):
     """Called by sounddevice to get next audio chunk"""
     global current_frequency, current_volume, is_playing
@@ -82,7 +84,7 @@ def audio_callback(outdata, frames, time_info, status):
         outdata[:] = np.zeros((frames, 1), dtype=np.float32)
 
 def start_audio_stream():
-    """Initialize and start audio output stream"""
+    """Init and start audio output stream"""
     global audio_stream
     
     try:
