@@ -44,8 +44,8 @@ def quantize_to_half_semitone(raw_freq, base_freq=432.0):
     # Convert freq to semitones relative to base (A4 = 432 Hz)
     semitones_from_base = 12.0 * math.log2(raw_freq / base_freq)
     
-    # Round to nearest half-semitone (0.5 semitone intervals)
-    quantized_semitones = round(semitones_from_base * 2) / 2.0
+    # Round to nearest semitone
+    quantized_semitones = round(semitones_from_base)
     
     # Convert back to frequency
     quantized_freq = base_freq * (2 ** (quantized_semitones / 12.0))

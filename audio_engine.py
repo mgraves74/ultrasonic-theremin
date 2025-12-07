@@ -14,10 +14,10 @@ CHUNK_SIZE = int(SAMPLE_RATE * CHUNK_DURATION)
 # Harmonic ratios for instrument-like timbre
 HARMONIC_RATIOS = [
     (1.0, 1.00),   # fundamental
-    (2.0, 0.80),   # 2nd harmonic
-    (3.0, 1.75),   # 3rd harmonic
-    (4.0, 0.25),   # 4th harmonic
-    (5.0, 0.18),   # 5th harmonic
+    (2.0, 0.60),   # 2nd harmonic
+    (3.0, 0.35),   # 3rd harmonic
+    (4.0, 0.15),   # 4th harmonic
+    (5.0, 0.08),   # 5th harmonic
 ]
 
 # ===== GLOBAL STATE =====
